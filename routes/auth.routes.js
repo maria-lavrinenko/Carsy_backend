@@ -7,7 +7,7 @@ const bcrypt = require("bcryptjs");
  * ! All the routes are prefixed by /api
  */
 
-const { isAuthenticated } = require("./../middleware/authMiddlewares");
+const isAuthenticated = require("./../middleware/authMiddlewares");
 const saltRounds = 12;
 
 /**

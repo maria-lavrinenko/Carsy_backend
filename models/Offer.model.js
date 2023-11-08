@@ -7,7 +7,7 @@ const offerSchema = new Schema(
     photo: [
       {
         type: String,
-        default: "Carsy-logo",
+        default: "carsy-logo.png",
       },
     ],
     brand: String,
