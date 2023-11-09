@@ -4,7 +4,7 @@ const userSchema = new Schema(
   {
     email: {
       type: String,
-      required: [true, "Email is required."],
+      required: true,
       unique: true,
       lowercase: true,
       trim: true,
@@ -15,7 +15,7 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: [true, "Password is required."],
+      required: true,
       // Removes the password from queries made to the DB
       select: false,
     },
@@ -23,7 +23,7 @@ const userSchema = new Schema(
       enum: ["carDealer", "client"],
       type: String,
     },
-    adresse: {
+    address: {
       city: String,
       zipcode: Number,
     },

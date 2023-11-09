@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({ path: "./../.env" });
 const Offer = require("../models/Offer.model.js");
 require("./../db/index.js");
 const { faker } = require("@faker-js/faker");

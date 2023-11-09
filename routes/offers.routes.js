@@ -44,7 +44,7 @@ router.get("/", async (req, res, next) => {
       },
       {
         $match: {
-          "result.0.city": query.city,
+          "result.0.address.city": query.city,
         },
       },
       {
@@ -53,7 +53,7 @@ router.get("/", async (req, res, next) => {
           model: 1,
           price: 1,
           photo: 1,
-          "result.city": 1,
+          "result.address.city": 1,
         },
       },
     ]);
