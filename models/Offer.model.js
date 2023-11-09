@@ -12,9 +12,9 @@ const offerSchema = new Schema(
     ],
     brand: String,
     model: String,
-    price: Number,
+    price: String,
     energy: String,
-    year: Number,
+    year: String,
     carDealer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

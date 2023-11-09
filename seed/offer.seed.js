@@ -1,6 +1,6 @@
 require("dotenv").config();
 const Offer = require("../models/Offer.model.js");
-require("../db/index");
+require("./../db/index.js");
 const { faker } = require("@faker-js/faker");
 
 (async function () {
@@ -21,7 +21,9 @@ const { faker } = require("@faker-js/faker");
         }),
         brand: vehicle.split(" ", 1).toString(),
         model: vehicleParts[1].toString(),
-        price: faker.commerce.price({ min: 10000, max: 50000, dec: 0 }),
+        price: faker.commerce
+          .price({ min: 10000, max: 50000, dec: 0 })
+          .toString(),
         energy: faker.vehicle.fuel(),
         year: faker.date
           .between({ from: "2000-01-01", to: "2022-12-31" })
