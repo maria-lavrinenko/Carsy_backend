@@ -9,7 +9,7 @@ router.get("/", async (req, res, next) => {
 });
 
 router.use("/auth", require("./auth.routes"));
-
+router.use("/offers", require("./offers.routes"));
 // router.use(isAuthenticated);
 
 module.exports = router;
