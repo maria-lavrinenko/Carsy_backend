@@ -148,8 +148,10 @@ router.post(
 
     try {
       let photo;
-      if (req.files) {
+      if (req.files.length) {
         photo = req.files.map((file) => file.path);
+      } else {
+        photo = ["carsy-logo.png"];
       }
       const offerToCreate = { ...req.body, photo, carDealer: req.userId };
       const newOffer = await Offer.create(offerToCreate);

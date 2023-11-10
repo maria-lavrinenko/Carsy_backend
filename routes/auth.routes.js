@@ -21,7 +21,7 @@ router.post(
     try {
       // Get infos from req.body
       // username, password
-      console.log(req.body);
+      // console.log(req.body);
 
       const { email, password } = req.body;
       // 1- Is the password safe?
