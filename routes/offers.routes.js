@@ -102,24 +102,33 @@ router.post("/:id/favourites", isAuthenticated, async (req, res, next) => {
 
 // available only for the owner of the offer
 
-router.put("/:id", isAuthenticated, async (req, res, next) => {
-  try {
-    const updatedOffer = await Offer.findOneAndUpdate(
-      {
-        carDealer: req.userId,
-        _id: req.params.id,
-      },
-      req.body,
-      { new: true }
-    ).populate("carDealer");
-    if (!updatedOffer) {
-      return res.status(401).json({ message: "Not allowed" });
+router.put(
+  "/:id",
+  isAuthenticated,
+  fileUploader.any("photo"),
+  async (req, res, next) => {
+    try {
+      let photo;
+      if (req.files) {
+        photo = req.files.map((file) => file.path);
+      }
+      const updatedOffer = await Offer.findOneAndUpdate(
+        {
+          carDealer: req.userId,
+          _id: req.params.id,
+        },
+        { ...req.body, photo: photo },
+        { new: true }
+      ).populate("carDealer");
+      if (!updatedOffer) {
+        return res.status(401).json({ message: "Not allowed" });
+      }
+      res.status(202).json(updatedOffer);
+    } catch (error) {
+      next(error);
     }
-    res.status(202).json(updatedOffer);
-  } catch (error) {
-    next(error);
   }
-});
+);
 
 router.delete("/:id", isAuthenticated, async (req, res, next) => {
   try {
@@ -133,12 +142,14 @@ router.delete("/:id", isAuthenticated, async (req, res, next) => {
 router.post(
   "/",
   isAuthenticated,
-  fileUploader.array("photo"),
+  fileUploader.any("photo"),
   async (req, res, next) => {
+    console.log(req.files);
+
     try {
       let photo;
-      if (req.file) {
-        photo = req.file.path;
+      if (req.files) {
+        photo = req.files.map((file) => file.path);
       }
       const offerToCreate = { ...req.body, photo, carDealer: req.userId };
       const newOffer = await Offer.create(offerToCreate);
