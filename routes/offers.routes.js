@@ -1,6 +1,8 @@
 const router = require("express").Router();
+const fileUploader = require("./../config/cloudinaryConfig");
 const Offer = require("./../models/Offer.model");
-
+const Favourite = require("../models/Favourite.model");
+const isAuthenticated = require("./../middleware/authMiddlewares");
 /**
  * ! All the routes are prefixed by /api/offers
  */
@@ -18,7 +20,7 @@ router.get("/", async (req, res, next) => {
     queryCond.push({ model: query.model });
   }
   if (req.query.price) {
-    // query.price = new RegExp(req.query.price, "g");
+    // query.price = new RegExp(req.query.price, "\\d", "g");
     queryCond.push({ price: { $lte: `${req.query.price}` } });
   }
   if (req.query.energy) {
@@ -53,6 +55,7 @@ router.get("/", async (req, res, next) => {
           model: 1,
           price: 1,
           photo: 1,
+          carDealer: 1,
           "result.address.city": 1,
         },
       },
@@ -64,10 +67,11 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:id", async (req, res, next) => {
-  const { id } = req.params;
+// available only for the logged in users
+
+router.get("/:id", isAuthenticated, async (req, res, next) => {
   try {
-    const oneOffer = await Offer.find({ _id: id }).populate({
+    const oneOffer = await Offer.find({ _id: req.params.id }).populate({
       path: "carDealer",
       select: " -createdAt -updatedAt",
     });
@@ -76,5 +80,73 @@ router.get("/:id", async (req, res, next) => {
     next(error);
   }
 });
+
+router.post("/:id/favourites", isAuthenticated, async (req, res, next) => {
+  const alreadyExists = await Favourite.findOne({
+    offer: req.params.id,
+    user: req.userId,
+  });
+  if (alreadyExists) {
+    return res.status(400).json({ message: "Already added" });
+  }
+  try {
+    const newFavourite = await Favourite.create({
+      offer: req.params.id,
+      user: req.userId,
+    });
+    res.status(201).json(newFavourite);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// available only for the owner of the offer
+
+router.put("/:id", isAuthenticated, async (req, res, next) => {
+  try {
+    const updatedOffer = await Offer.findOneAndUpdate(
+      {
+        carDealer: req.userId,
+        _id: req.params.id,
+      },
+      req.body,
+      { new: true }
+    ).populate("carDealer");
+    if (!updatedOffer) {
+      return res.status(401).json({ message: "Not allowed" });
+    }
+    res.status(202).json(updatedOffer);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete("/:id", isAuthenticated, async (req, res, next) => {
+  try {
+    await Offer.findOneAndDelete({ carDealer: req.userId, _id: req.params.id });
+    res.sendStatus(204);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post(
+  "/",
+  isAuthenticated,
+  fileUploader.array("photo"),
+  async (req, res, next) => {
+    try {
+      let photo;
+      if (req.file) {
+        photo = req.file.path;
+      }
+      const offerToCreate = { ...req.body, photo, carDealer: req.userId };
+      const newOffer = await Offer.create(offerToCreate);
+      res.status(201).json(newOffer);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 module.exports = router;

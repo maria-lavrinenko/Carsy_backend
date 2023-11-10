@@ -6,13 +6,13 @@ const offerSchema = new Schema(
   {
     photo: [
       {
-        type: String,
+        type: [String],
         default: "carsy-logo.png",
       },
     ],
     brand: String,
     model: String,
-    price: String,
+    price: { type: String, trim: true },
     energy: String,
     year: String,
     carDealer: {
