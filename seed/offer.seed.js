@@ -14,11 +14,11 @@ const { faker } = require("@faker-js/faker");
       console.log("vehicle", vehicle);
       const vehicleParts = vehicle.split(" ");
       const offer = {
-        photo: faker.image.urlLoremFlickr({
-          width: 320,
-          height: 240,
-          category: "car",
-        }),
+        // photo: faker.image.urlLoremFlickr({
+        //   width: 320,
+        //   height: 240,
+        //   category: "car",
+        // }),
         brand: vehicle.split(" ", 1).toString(),
         model: vehicleParts[1].toString(),
         price: faker.commerce
