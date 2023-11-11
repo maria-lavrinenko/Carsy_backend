@@ -3,7 +3,6 @@ const User = require("./../models/User.model");
 
 const isAuthenticated = async (req, res, next) => {
   try {
-    console.log("HERE ARE REQ HEADERS", req.headers);
     let token = req.headers.authorization;
     if (!token) {
       return res.status(401).json({ message: "No token found in the headers" });

@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const mongoose = require("mongoose");
 const fileUploader = require("./../config/cloudinaryConfig");
 const Offer = require("./../models/Offer.model");
 const Favourite = require("../models/Favourite.model");
@@ -10,6 +11,7 @@ const isAuthenticated = require("./../middleware/authMiddlewares");
 router.get("/", async (req, res, next) => {
   const query = {};
   const queryCond = [];
+  console.log(typeof req.query.carDealer);
 
   if (req.query.brand) {
     query.brand = new RegExp(req.query.brand, "gi");
@@ -29,6 +31,10 @@ router.get("/", async (req, res, next) => {
   }
   if (req.query.city) {
     query.city = new RegExp(req.query.city, "gi");
+  }
+  if (isAuthenticated && req.query.carDealer) {
+    query.carDealer = req.query.carDealer;
+    queryCond.push({ carDealer: new mongoose.Types.ObjectId(query.carDealer) });
   }
 
   try {
