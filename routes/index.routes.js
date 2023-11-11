@@ -14,5 +14,6 @@ router.use("/offers", require("./offers.routes"));
 router.use(isAuthenticated);
 
 router.use("/favourites", require("./favourites.routes"));
+router.use("/my-offers", require("./my-offers.route"));
 
 module.exports = router;
