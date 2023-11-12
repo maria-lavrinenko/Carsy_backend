@@ -11,7 +11,6 @@ const isAuthenticated = require("./../middleware/authMiddlewares");
 router.get("/", async (req, res, next) => {
   const query = {};
   const queryCond = [];
-  console.log(req.query.carDealer);
 
   if (req.query.brand) {
     query.brand = new RegExp(req.query.brand, "gi");
@@ -56,13 +55,14 @@ router.get("/", async (req, res, next) => {
           brand: 1,
           model: 1,
           price: 1,
+          energy: 1,
           photo: 1,
           carDealer: 1,
           "result.address.city": 1,
         },
       },
     ]);
-
+    console.log(req.query);
     res.json(allOffers);
   } catch (error) {
     next(error);
@@ -111,6 +111,18 @@ router.post("/:id/favourites", isAuthenticated, async (req, res, next) => {
   }
 });
 
+router.delete("/:id/favourites", isAuthenticated, async (req, res, next) => {
+  try {
+    await Favourite.findOneAndDelete({
+      offer: req.params.id,
+      user: req.userId,
+    });
+    res.sendStatus(204);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // available only for the owner of the offer
 
 router.put(
@@ -143,7 +155,12 @@ router.put(
 
 router.delete("/:id", isAuthenticated, async (req, res, next) => {
   try {
-    await Offer.findOneAndDelete({ carDealer: req.userId, _id: req.params.id });
+    console.log(req.params);
+
+    await Offer.findOneAndDelete({
+      carDealer: req.userId,
+      _id: req.params.id,
+    });
     res.sendStatus(204);
   } catch (error) {
     next(error);

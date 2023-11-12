@@ -16,13 +16,4 @@ router.get("/", isAuthenticated, async (req, res, next) => {
   }
 });
 
-router.delete("/", isAuthenticated, async (req, res, next) => {
-  try {
-    await Favourite.findOneAndDelete({ _id: req.body.id });
-    res.sendStatus(204);
-  } catch (error) {
-    next(error);
-  }
-});
-
 module.exports = router;
