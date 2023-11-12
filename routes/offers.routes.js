@@ -32,10 +32,6 @@ router.get("/", async (req, res, next) => {
   if (req.query.city) {
     query.city = new RegExp(req.query.city, "gi");
   }
-  if (isAuthenticated) {
-    query.carDealer = req.userId;
-    queryCond.push({ carDealer: new mongoose.Types.ObjectId(query.carDealer) });
-  }
 
   try {
     const allOffers = await Offer.aggregate([
@@ -86,15 +82,24 @@ router.get("/:id", isAuthenticated, async (req, res, next) => {
     next(error);
   }
 });
+//  route to check if fav exists already //
+router.get("/:id/favourites", isAuthenticated, async (req, res, next) => {
+  try {
+    const alreadyExists = await Favourite.findOne({
+      offer: { _id: req.params.id },
+      user: { _id: req.userId },
+    });
+    if (alreadyExists) {
+      return res.status(200).json({ isFavorite: true });
+    } else {
+      return res.status(200).json({ isFavorite: false });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 router.post("/:id/favourites", isAuthenticated, async (req, res, next) => {
-  const alreadyExists = await Favourite.findOne({
-    offer: req.params.id,
-    user: req.userId,
-  });
-  if (alreadyExists) {
-    return res.status(400).json({ message: "Already added" });
-  }
   try {
     const newFavourite = await Favourite.create({
       offer: req.params.id,
