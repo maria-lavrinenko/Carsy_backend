@@ -21,7 +21,6 @@ router.get("/", async (req, res, next) => {
     queryCond.push({ model: query.model });
   }
   if (req.query.price) {
-    // query.price = new RegExp(req.query.price, "\\d", "g");
     queryCond.push({ price: { $lte: `${req.query.price}` } });
   }
   if (req.query.energy) {
