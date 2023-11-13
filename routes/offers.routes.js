@@ -124,7 +124,7 @@ router.delete("/:id/favourites", isAuthenticated, async (req, res, next) => {
 
 // available only for the owner of the offer
 
-router.put(
+router.patch(
   "/:id",
   isAuthenticated,
   fileUploader.any("photo"),
@@ -142,6 +142,8 @@ router.put(
         { ...req.body, photo: photo },
         { new: true }
       ).populate("carDealer");
+      console.log(req.body);
+
       if (!updatedOffer) {
         return res.status(401).json({ message: "Not allowed" });
       }

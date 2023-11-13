@@ -30,7 +30,6 @@ const userSchema = new Schema(
     phone: String,
   },
   {
-    // this second object adds extra properties: `createdAt` and `updatedAt`
     timestamps: true,
   }
 );
