@@ -10,7 +10,7 @@ router.get("/", isAuthenticated, async (req, res, next) => {
     const myOffers = await Offer.find({
       carDealer: req.userId,
     });
-    console.log(req);
+    // console.log(req);
     res.json(myOffers);
   } catch (error) {
     next(error);

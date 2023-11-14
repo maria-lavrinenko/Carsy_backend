@@ -61,7 +61,7 @@ router.get("/", async (req, res, next) => {
         },
       },
     ]);
-    console.log(req.query);
+    console.log(allOffers);
     res.json(allOffers);
   } catch (error) {
     next(error);
@@ -124,16 +124,25 @@ router.delete("/:id/favourites", isAuthenticated, async (req, res, next) => {
 
 // available only for the owner of the offer
 
-router.patch(
+router.put(
   "/:id",
   isAuthenticated,
   fileUploader.any("photo"),
   async (req, res, next) => {
     try {
       let photo;
+      for (const key in req.body) {
+        if (req.body[key] === "") {
+          req.body[key] = undefined;
+        }
+      }
+
+      console.log(req.body);
       if (req.files && req.files.length < 11) {
+        console.log(req.files);
         photo = req.files.map((file) => file.path);
       }
+      if (!photo.length) photo = undefined;
       const updatedOffer = await Offer.findOneAndUpdate(
         {
           carDealer: req.userId,

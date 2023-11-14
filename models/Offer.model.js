@@ -6,12 +6,11 @@ const offerSchema = new Schema(
     photo: [
       {
         type: String,
-        default: "/carsy-logo.png",
       },
     ],
     brand: String,
     model: String,
-    price: { type: String, trim: true },
+    price: { type: Number, trim: true },
     energy: String,
     year: String,
     carDealer: {
@@ -23,6 +22,14 @@ const offerSchema = new Schema(
     timestamps: true,
   }
 );
+
+offerSchema.pre("save", function (next) {
+  // console.log(this);
+  if (!this.photo || !this.photo.length) {
+    this.photo = ["/carsy-logo.png"];
+  }
+  next();
+});
 
 const Offer = model("Offer", offerSchema);
 
