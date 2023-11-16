@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 const User = require("./../models/User.model");
-
 const isAuthenticated = async (req, res, next) => {
   try {
     let token = req.headers.authorization;
@@ -8,8 +7,6 @@ const isAuthenticated = async (req, res, next) => {
       return res.status(401).json({ message: "No token found in the headers" });
     }
     token = token.replace("Bearer ", "");
-
-    // console.log(token)
 
     const payload = jwt.verify(token, process.env.TOKEN_SECRET, {
       algorithms: ["HS256"],
