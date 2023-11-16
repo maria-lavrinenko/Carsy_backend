@@ -9,7 +9,7 @@ router.get("/", isAuthenticated, async (req, res, next) => {
     const allFavourites = await Favourite.find({ user: req.userId }).populate(
       "offer"
     );
-    // console.log(req);
+
     res.json(allFavourites);
   } catch (error) {
     next(error);

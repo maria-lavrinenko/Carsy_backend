@@ -61,7 +61,7 @@ router.get("/", async (req, res, next) => {
         },
       },
     ]);
-    console.log(allOffers);
+    // console.log(allOffers);
     res.json(allOffers);
   } catch (error) {
     next(error);
@@ -137,9 +137,8 @@ router.put(
         }
       }
 
-      console.log(req.body);
+      c;
       if (req.files && req.files.length < 11) {
-        console.log(req.files);
         photo = req.files.map((file) => file.path);
       }
       if (!photo.length) photo = undefined;
@@ -165,8 +164,6 @@ router.put(
 
 router.delete("/:id", isAuthenticated, async (req, res, next) => {
   try {
-    console.log(req.params);
-
     await Offer.findOneAndDelete({
       carDealer: req.userId,
       _id: req.params.id,

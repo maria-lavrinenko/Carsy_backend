@@ -11,7 +11,6 @@ const { faker } = require("@faker-js/faker");
 
     for (let i = 0; i < 10; i++) {
       const vehicle = faker.vehicle.vehicle();
-      console.log("vehicle", vehicle);
       const vehicleParts = vehicle.split(" ");
       const offer = {
         // photo: faker.image.urlLoremFlickr({

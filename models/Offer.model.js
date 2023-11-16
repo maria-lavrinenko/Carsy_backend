@@ -24,7 +24,6 @@ const offerSchema = new Schema(
 );
 
 offerSchema.pre("save", function (next) {
-  // console.log(this);
   if (!this.photo || !this.photo.length) {
     this.photo = ["/carsy-logo.png"];
   }
