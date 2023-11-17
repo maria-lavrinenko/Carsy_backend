@@ -137,7 +137,6 @@ router.put(
         }
       }
 
-      c;
       if (req.files && req.files.length < 11) {
         photo = req.files.map((file) => file.path);
       }
