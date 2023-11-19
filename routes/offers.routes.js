@@ -21,7 +21,7 @@ router.get("/", async (req, res, next) => {
     queryCond.push({ model: query.model });
   }
   if (req.query.price) {
-    queryCond.push({ price: { $lte: `${req.query.price}` } });
+    queryCond.push({ price: { $lte: req.query.price } });
   }
   if (req.query.energy) {
     query.energy = new RegExp(req.query.energy, "gi");
@@ -31,6 +31,7 @@ router.get("/", async (req, res, next) => {
     query.city = new RegExp(req.query.city, "gi");
   }
 
+  console.log("QUERY CONDTITIONS", queryCond);
   try {
     const allOffers = await Offer.aggregate([
       {

@@ -10,7 +10,7 @@ const offerSchema = new Schema(
     ],
     brand: String,
     model: String,
-    price: { type: Number, trim: true },
+    price: { type: String, trim: true },
     energy: String,
     year: String,
     carDealer: {
